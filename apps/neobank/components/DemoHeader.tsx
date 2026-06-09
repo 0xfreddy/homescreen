@@ -20,9 +20,11 @@ export const DemoHeader = (props: { title: string; showBack?: boolean }) => {
           )}
         </Left>
         <Center>
-          <span class="font-semibold text-base text-neutral-900">
-            {props.title}
-          </span>
+          {props.title ? (
+            <span class="font-semibold text-base text-neutral-900">
+              {props.title}
+            </span>
+          ) : null}
         </Center>
         <Right />
       </Nav>

@@ -33,7 +33,7 @@ export const BankConnect = () => {
           <div class="col gap-1">
             <p class={`${theme.muted} text-sm`}>Available balance</p>
             <p class="text-4xl font-light tabular-nums text-neutral-900">
-              $1,420
+              ${state.$balance!.value.toLocaleString()}
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export const BankConnect = () => {
               <div class={`${theme.success} p-4 text-sm`}>
                 ✓ Bank connected · +5% cashback active
               </div>
-              <PrimaryButton onClick={() => goTo(4)}>
+              <PrimaryButton onClick={() => goTo(3)}>
                 View your Iron account →
               </PrimaryButton>
             </div>

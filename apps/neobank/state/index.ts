@@ -1,6 +1,7 @@
 import { deepSignal } from "deepsignal";
+import { syncPresenter } from "../presenter";
 
-export type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 type Toast = { message: string; visible: boolean } | null;
 
@@ -31,6 +32,8 @@ type State = {
   platinumOfferShown: boolean;
   bankPushShown: boolean;
   awsPushShown: boolean;
+  checkoutAmount: number;
+  showFaceIdSuccess: boolean;
 };
 
 export const state = deepSignal<State>({
@@ -52,18 +55,25 @@ export const state = deepSignal<State>({
   platinumOfferShown: false,
   bankPushShown: false,
   awsPushShown: false,
+  checkoutAmount: 1420,
+  showFaceIdSuccess: false,
 });
 
 export const goTo = (step: Step) => {
   state.step = step;
+  syncPresenter(step);
 };
 
 export const goNext = () => {
-  if (state.step < 9) state.step = (state.step + 1) as Step;
+  if (state.step < 8) goTo((state.step + 1) as Step);
+};
+
+export const adjustCheckoutAmount = (delta: number) => {
+  state.checkoutAmount = Math.max(10, state.checkoutAmount + delta);
 };
 
 export const goBack = () => {
-  if (state.step > 1) state.step = (state.step - 1) as Step;
+  if (state.step > 1) goTo((state.step - 1) as Step);
 };
 
 export const showToast = (message: string, ms = 3500) => {
@@ -93,14 +103,17 @@ export const activateVa = () => {
 export const completeActivation = () => {
   state.showActivation = false;
   state.activationPhase = "idle";
-  goTo(2);
 };
 
 export const completeDeposit = () => {
-  state.balance = 1420;
+  state.balance = state.checkoutAmount;
   state.depositComplete = true;
   state.showRamps = false;
-  showToast("🎉 $10 bonus credited + cashback activated");
+  state.showFaceIdSuccess = true;
+  setTimeout(() => {
+    state.showFaceIdSuccess = false;
+    showToast("🎉 $10 bonus credited + cashback activated");
+  }, 3200);
 };
 
 export const connectBank = () => {
@@ -143,4 +156,7 @@ export const resetDemo = () => {
   state.push = null;
   state.bankPushShown = false;
   state.awsPushShown = false;
+  state.checkoutAmount = 1420;
+  state.showFaceIdSuccess = false;
+  syncPresenter(1);
 };

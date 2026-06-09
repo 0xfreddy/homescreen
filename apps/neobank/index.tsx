@@ -1,10 +1,12 @@
+import { useEffect } from "preact/hooks";
 import { Screen } from "../../components/Screen";
 import { Toast } from "./components/Toast";
 import { PushBanner } from "./components/PushBanner";
+import { FaceIdSuccess } from "./components/FaceIdSuccess";
 import { theme } from "./theme";
+import { syncPresenter } from "./presenter";
 import { state } from "./state";
-import { WalletEntry } from "./screens/WalletEntry";
-import { FirstDeposit } from "./screens/FirstDeposit";
+import { NeobankHome } from "./screens/NeobankHome";
 import { BankConnect } from "./screens/BankConnect";
 import { Transactions } from "./screens/Transactions";
 import { Subscriptions } from "./screens/Subscriptions";
@@ -14,26 +16,33 @@ import { Analytics } from "./screens/Analytics";
 import { Close } from "./screens/Close";
 
 const SCREENS = {
-  1: WalletEntry,
-  2: FirstDeposit,
-  3: BankConnect,
-  4: Transactions,
-  5: Subscriptions,
-  6: AutoPayments,
-  7: Tiers,
-  8: Analytics,
-  9: Close,
+  1: NeobankHome,
+  2: BankConnect,
+  3: Transactions,
+  4: Subscriptions,
+  5: AutoPayments,
+  6: Tiers,
+  7: Analytics,
+  8: Close,
 } as const;
 
 export default () => {
   const step = state.$step!.value;
   const ScreenComponent = SCREENS[step];
 
+  useEffect(() => {
+    syncPresenter(state.step, true);
+    return () => syncPresenter(1, false);
+  }, []);
+
+  const showFaceId = state.$showFaceIdSuccess!.value;
+
   return (
     <Screen class={theme.screen}>
       <ScreenComponent />
       <Toast />
       <PushBanner />
+      {showFaceId && <FaceIdSuccess />}
     </Screen>
   );
 };

@@ -1,6 +1,8 @@
 import { css, cx } from "@twind/core";
 import { Children } from "../apps/app store/utils";
-import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
+import { PresenterPanel } from "./PresenterPanel";
+import { Step } from "../apps/neobank/state";
 
 interface NavigatorStandalone extends Navigator {
   standalone?: boolean;
@@ -26,6 +28,22 @@ export const Device = (props: { children: Children }) => {
 
 const Wrapper = () => {
   const child = useRef<HTMLDivElement>(null);
+  const [presenterStep, setPresenterStep] = useState<Step>(1);
+  const [presenterVisible, setPresenterVisible] = useState(false);
+
+  useEffect(() => {
+    const onMessage = (event: MessageEvent) => {
+      if (event.data?.type !== "neobank-presenter") return;
+      if (event.data.open === false) {
+        setPresenterVisible(false);
+        return;
+      }
+      setPresenterStep(event.data.step as Step);
+      setPresenterVisible(true);
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
 
   useLayoutEffect(() => {
     const $elem: HTMLElement | null | undefined = child.current;
@@ -53,17 +71,19 @@ const Wrapper = () => {
   }, []);
 
   return (
-    <div
-      ref={child}
-      class={cx("flex-none relative w-screen h-screen bg-black", visible)}
-    >
-      <div id="device" class="w-full h-full overflow-hidden">
-        <iframe
-          class="w-full h-full rounded-3xl overflow-hidden transform-gpu"
-          src={window.location.href}
-        />
-      </div>
-      <header class="absolute top-2 w-full row aic text-white/80 children:(flex-1)">
+    <div class="fixed inset-0 row aic jcc gap-10 p-8" style={{ backgroundImage: "url('/images/neobank-bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", filter: "none" }}>
+      <div class="absolute inset-0" style={{ backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", backgroundColor: "rgba(0,0,0,0.25)" }} />
+      <div
+        ref={child}
+        class={cx("flex-none relative z-10 bg-black", visible)}
+      >
+        <div id="device" class="w-full h-full overflow-hidden">
+          <iframe
+            class="w-full h-full rounded-3xl overflow-hidden transform-gpu"
+            src={window.location.href}
+          />
+        </div>
+        <header class="absolute top-2 w-full row aic text-white/80 children:(flex-1)">
         <span id="time" class="text-sm row jcc">
           {new Date().toLocaleTimeString().split(":").slice(0, -1).join(":")}
         </span>
@@ -181,7 +201,9 @@ const Wrapper = () => {
             />
           </svg>
         </span>
-      </header>
+        </header>
+      </div>
+      <div class="relative z-10"><PresenterPanel step={presenterStep} visible={presenterVisible} /></div>
     </div>
   );
 };
