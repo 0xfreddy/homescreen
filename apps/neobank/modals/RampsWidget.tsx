@@ -17,11 +17,9 @@ export const RampsWidget = () => {
           <h2 class="text-xl font-bold text-neutral-900">Secure Checkout</h2>
 
           <div class="row aic gap-3">
-            <img
-              src="/images/avatar.jpg"
-              alt=""
-              class="w-10 h-10 rounded-full object-cover flex-none"
-            />
+            <div class="w-11 h-11 rounded-full bg-white border border-neutral-200 row aic jcc text-lg font-semibold text-neutral-800 shadow-sm flex-none">
+              A
+            </div>
             <div class="flex-1 min-w-0 col gap-0.5">
               <span class="font-semibold text-neutral-900 text-sm">
                 Alex Smith
