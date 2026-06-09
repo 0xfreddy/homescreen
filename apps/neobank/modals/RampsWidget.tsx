@@ -35,21 +35,13 @@ export const RampsWidget = () => {
 
         <div class="rounded-2xl border border-neutral-200 p-4 col gap-4">
           <div class="row aic jcsb">
-            <div class="col gap-1">
-              <span class="text-xs text-neutral-500">Buying</span>
-              <div class="row aic gap-2">
-                <div class="w-8 h-8 rounded-full bg-[#2775CA] row aic jcc text-white text-xs font-bold">
-                  $
-                </div>
-                <span class="font-semibold text-neutral-900">USDC</span>
-              </div>
+            <div class="row aic gap-2">
+              <img src="/images/usdclogo.png" class="w-8 h-8 rounded-full" alt="USDC" />
+              <span class="font-semibold text-neutral-900">USDC</span>
             </div>
-            <div class="col gap-1 aife">
-              <span class="text-xs text-neutral-500">Price</span>
-              <span class="font-semibold text-neutral-900 tabular-nums">
-                $1.00
-              </span>
-            </div>
+            <span class="font-semibold text-neutral-900 tabular-nums">
+              $1.00
+            </span>
           </div>
 
           <div class="col gap-3 items-center py-2">

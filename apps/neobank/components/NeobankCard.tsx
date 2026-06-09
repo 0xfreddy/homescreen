@@ -1,4 +1,5 @@
 import { VA_DETAILS } from "../state";
+import { SpotlightButton } from "../../../components/SpotlightButton";
 
 export const NeobankCard = (props: {
   activated: boolean;
@@ -33,12 +34,17 @@ export const NeobankCard = (props: {
           </span>
         </div>
       ) : (
-        <button
+        <SpotlightButton
           onClick={props.onActivate}
-          class="self-start rounded-full bg-white/25 backdrop-blur border border-white/40 px-4 py-2 text-sm font-semibold text-white shadow-sm"
+          class="self-start px-4 py-2"
         >
-          Activate card
-        </button>
+          <span
+            class="relative mt-px bg-clip-text text-sm font-semibold text-transparent transition-all duration-200"
+            style={{ backgroundImage: "linear-gradient(to bottom, rgba(255,255,255,0.7), #fff)" }}
+          >
+            Activate card
+          </span>
+        </SpotlightButton>
       )}
     </div>
   </div>
