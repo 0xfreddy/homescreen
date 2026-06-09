@@ -119,6 +119,7 @@ export const completeDeposit = () => {
 export const connectBank = () => {
   state.bankConnected = true;
   state.showPlaid = false;
+  goTo(1);
   showPush({
     title: "Bank connected",
     body: "You're earning +5% cashback on eligible spend.",
