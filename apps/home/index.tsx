@@ -14,10 +14,13 @@ export default () => {
   const installedApps = state.$installedApps!.value;
 
   const pages = useMemo(() => {
-    const numberOfPages = Math.max(...installedApps.map((x) => x.page)) + 1;
+    const gridApps = installedApps.filter((x) => x.grid);
+    const numberOfPages = gridApps.length
+      ? Math.max(...gridApps.map((x) => x.page)) + 1
+      : 1;
     return Array.from({ length: numberOfPages }, (_, i) => i).reduce(
       (acc, i) => {
-        const apps = installedApps.filter((x) => x.page === i);
+        const apps = gridApps.filter((x) => x.page === i);
         acc.push(apps);
         return acc;
       },
